@@ -82,7 +82,7 @@ jobs:
         name: Compute Configuration
         run: |
           if ${{ github.event_name == 'pull_request' }}; then
-            if ${{ contains(github.event.pull_request.labels.*.name, 'A-index') }}; then
+            if ${{ contains(github.event.pull_request.labels.*.name, 'A-index') || contains(github.event.pull_request.labels.*.name, 'A-cache') }}; then
               echo testbed=true >> "$GITHUB_OUTPUT"
               echo 'package-pattern=.*' >> "$GITHUB_OUTPUT"
             elif ${{ contains(github.event.pull_request.labels.*.name, 'A-testbed') }}; then
@@ -90,7 +90,7 @@ jobs:
               echo 'package-pattern=^leanprover' >> "$GITHUB_OUTPUT"
             fi
             echo search-packages=${{ contains(github.event.pull_request.labels.*.name, 'A-search') }} >> "$GITHUB_OUTPUT"
-            echo 'testbed-toolchain=${{ contains(github.event.pull_request.labels.*.name, 'A-testbed') && 'package,latest' || 'none' }}' >> "$GITHUB_OUTPUT"
+            echo 'testbed-toolchain=${{ (contains(github.event.pull_request.labels.*.name, 'A-testbed') || contains(github.event.pull_request.labels.*.name, 'A-cache')) && 'package,latest' || 'none' }}' >> "$GITHUB_OUTPUT"
             echo cache-builds=${{ contains(github.event.pull_request.labels.*.name, 'A-cache') }} >> "$GITHUB_OUTPUT"
           else
             if ${{ github.event_name == 'push' && github.ref_name == 'master' && contains(github.event.head_commit.message, 'UPDATE-INDEX') }}; then
