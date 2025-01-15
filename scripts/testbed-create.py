@@ -113,11 +113,7 @@ if __name__ == "__main__":
       if git_url is None:
         logging.error(f"{pkg['fullName']}: Package lacks a Git source")
       else:
-        cache_builds = (
-          args.cache and
-          pkg['owner'] in ['leanprover', 'leanprover-community'] and
-          pkg['fullName'] != 'leanprover-community/mathlib'
-        )
+        cache_builds = args.cache and pkg['fullName'] != 'leanprover-community/mathlib'
         entry = create_entry(
           pkg['fullName'], git_url,
           toolchains, args.version_tags, cache_builds,
